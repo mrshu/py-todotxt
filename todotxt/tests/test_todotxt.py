@@ -11,11 +11,16 @@ class TestTasksInitalization:
     """Initalization tests.
     Their purpose is to test loading of tasks from a file."""
 
-    tasks = None
-
     def test_initalization(self):
-        self.tasks = Tasks('./todo.txt')
-        assert self.tasks.path == './todo.txt'
+        tasks = Tasks('./todo.txt')
+        assert tasks.path == './todo.txt'
+        assert len(tasks.tasks) == 0
+
+
+    def test_load(self):
+        tasks = Tasks('./todo.txt')
+        tasks.load()
+        assert len(tasks.tasks) == 8
 
 
 

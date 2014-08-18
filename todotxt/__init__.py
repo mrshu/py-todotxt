@@ -86,7 +86,11 @@ class Tasks(object):
         """Loads tasks from given file, parses them into internal
         representation and stores them in this manager's object."""
 
-        pass
+        with open(self.path, 'r') as f:
+            i = 0
+            for line in f:
+                self.tasks.append(Task(line, i))
+                i += 1
 
     def save(self):
         """Saves tasks that are saved in this manager."""
