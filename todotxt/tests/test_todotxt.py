@@ -23,7 +23,6 @@ class TestTasksInitalization:
         assert len(tasks.tasks) == 8
 
 
-
 def test_parse():
 
     task1 = Task("(A) +funny task with prioity and project", 1)
@@ -45,7 +44,6 @@ def test_parse():
     assert task2.todo == 'This is a finished task'
 
     task3 = Task("Some @task with @interesting contexts", 1)
-    print(len(task3.contexts))
     assert len(task3.contexts) == 2
     assert task3.contexts[0] == '@task'
     assert task3.contexts[1] == '@interesting'
@@ -60,3 +58,12 @@ def test_todo_rebuilding():
     task1.priority = 'B'
     assert task1.rebuild_raw_todo() == updated_text
 
+
+
+def test_tasks_filterby():
+    tasks = Tasks('./todo.txt')
+    tasks.load()
+    assert tasks.tasks[0].matches('task') == True
+
+    new_tasks = tasks.filter_by('task')
+    assert len(new_tasks) == 7

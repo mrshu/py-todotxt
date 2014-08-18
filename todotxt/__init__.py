@@ -67,6 +67,10 @@ class Task(object):
         if len(match) != 0:
             self.projects = match
 
+    def matches(self, text):
+        """Determines whether the tasks matches the text."""
+
+        return text in self.todo
 
     def rebuild_raw_todo(self):
         """Rebuilds self.raw_todo from data associated with the Task object."""
@@ -96,8 +100,9 @@ class Tasks(object):
     path = ''
     tasks = []
 
-    def __init__(self, path):
+    def __init__(self, path=None, tasks=None):
         self.path = path
+        self.tasks = tasks if tasks != None else []
 
     def load(self):
         """Loads tasks from given file, parses them into internal
@@ -109,7 +114,19 @@ class Tasks(object):
                 self.tasks.append(Task(line, i))
                 i += 1
 
-    def save(self):
-        """Saves tasks that are saved in this manager."""
+    def save(self, filename=None):
+        """Saves tasks that are saved in this manager. If specified they will
+        be saved in the filename arguemnt of this function. Otherwise the
+        default path (self.path) will be used."""
 
-        pass
+        filename = self.path if filename == None else filename
+        with open(filename, 'w') as f:
+            for task in self.tasks:
+                f.write("{0}\n".format(task.rebuild_raw_todo()))
+
+    def filter_by(self, text):
+        """Filteres the tasks by a given filter text. Returns a new Tasks
+        object. Note: the path parameter of the new object will stay the same."""
+
+        return filter(lambda x: x.matches(text), self.tasks)
+
