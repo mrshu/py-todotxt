@@ -77,3 +77,13 @@ def test_tasks_orderby():
     new_tasks = tasks.order_by('priority')
     assert new_tasks.tasks[0].priority == 'A'
     assert new_tasks.tasks[1].priority == 'B'
+    assert len(new_tasks.tasks) == 8
+
+
+def test_tasks_filterby_and_orderby():
+    tasks = Tasks('./todo.txt')
+    tasks.load()
+
+    new_tasks = tasks.order_by('priority').filter_by('context')
+    assert len(new_tasks.tasks) == 2
+    assert new_tasks.tasks[0].priority == 'B'
