@@ -31,3 +31,11 @@ def test_parse():
 
     assert task1.created_date == None
     assert task1.finished_date == None
+
+    assert task1.__str__() == "1: (A) +funny task with prioity and project"
+
+    task2 = Task("x This is a finished task", 1)
+    assert task2.tid == 1
+    assert task2.finished == True
+    assert task2.todo == 'This is a finished task'
+

@@ -30,7 +30,7 @@ class Task(object):
 
         text = self.raw_todo
         splits = text.split(' ')
-        if text[0] == ' ' and text[1] == ' ':
+        if text[0] == 'x' and text[1] == ' ':
             self.finished = True
             splits = splits[1:]
 
