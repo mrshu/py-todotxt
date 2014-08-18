@@ -2,6 +2,7 @@
 """The main endpoint for todotxt."""
 
 from datetime import datetime
+import re
 
 class Task(object):
     """A class that represents a task."""
@@ -15,31 +16,49 @@ class Task(object):
     created_date = None
     finished_date = None
 
-    def __init__(self, id, raw_todo, todo, priority='^', projects=None, \
-            contexts=None, finished=False, created_date=None, \
-            finished_date=None):
+    DATE_REGEX = "([\\d]{4})-([\\d]{2})-([\\d]{2})"
+
+    def __init__(self, raw_todo, id=-1):
 
         self.tid = id
         self.raw_todo = raw_todo
-        self.todo = todo
 
-        self.priority = priority
-        self.finished = finished
+        self.parse()
 
-        # date parsing into datetime
-        if created_date != None:
-            self.created_date = datetime.strptime(created_date, "%Y-%m-%d")
-        if finished_date != None:
-            self.finished_date = datetime.strptime(finished_date, "%Y-%m-%d")
+    def parse(self):
+        """Parse the text of self.raw_todo and update internal state."""
 
-        if projects != None:
-            self.projects = projects
+        text = self.raw_todo
+        splits = text.split(' ')
+        if text[0] == ' ' and text[1] == ' ':
+            self.finished = True
+            splits = splits[1:]
 
-        if contexts != None:
-            self.contexts = contexts
+        match = re.search(self.DATE_REGEX, splits[0])
+        if match != None:
+            self.finished_date = datetime.strptime(match.group(0), "%Y-%m-%d")
+            splits = splits[1:]
+
+        head = splits[0]
+
+        if (len(head) == 3) and \
+            (head[0] == '(') and \
+            (head[2] == ')') and \
+            (ord(head[1]) >= 65 and ord(head[1]) <= 90):
+
+            self.priority = head[1]
+            splits = splits[1:]
+
+        match = re.search(self.DATE_REGEX, splits[0])
+        if match != None:
+            self.created_date = datetime.strptime(match.group(0), "%Y-%m-%d")
+            splits = splits[1:]
+
+        self.todo = ' '.join(splits)
 
     def __str__(self):
         return "{0}: {1}".format(self.tid, self.raw_todo)
+
 
 class Tasks(object):
     """Task manager that handles loading, saving and filtering tasks."""
@@ -63,8 +82,4 @@ class Tasks(object):
         pass
 
 
-    def parse(self, text):
-        """Parse the text of the todo and return its internal representation
-        (Todo object)."""
 
-        pass
