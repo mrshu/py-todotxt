@@ -1,0 +1,8 @@
+Short task
+Not that short task
+2013-12-30 A task with create date
+A task with @interesting context
+And task with +important project
+(A) funny task with priority
+(B) 2014-01-02 a funny task for +important project with @interesting context
+x and this one is already done

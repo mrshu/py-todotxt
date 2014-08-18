@@ -49,7 +49,7 @@ class Tasks(object):
     tasks = []
 
     def __init__(self, path):
-        pass
+        self.path = path
 
     def load(self):
         """Loads tasks from given file, parses them into internal
