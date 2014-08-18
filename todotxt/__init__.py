@@ -2,6 +2,7 @@
 """The main endpoint for todotxt."""
 
 from datetime import datetime
+from operator import attrgetter
 import re
 
 DATE_REGEX = "([\\d]{4})-([\\d]{2})-([\\d]{2})"
@@ -128,5 +129,28 @@ class Tasks(object):
         """Filteres the tasks by a given filter text. Returns a new Tasks
         object. Note: the path parameter of the new object will stay the same."""
 
-        return filter(lambda x: x.matches(text), self.tasks)
+        return Tasks(self.path, filter(lambda x: x.matches(text), self.tasks))
 
+    def order_by(self, criteria):
+        """Sorts the tasks by given criteria and returns a new Tasks object
+        with the new ordering. The criteria argument can have the following
+        values:
+            - id
+            - priority
+            - finished
+            - created_date
+            - finished_date"""
+
+        reversed = False
+        if criteria[0] == '-':
+            reversed = True
+
+        criterias = ['id', 'priority', 'finished', 'created_date', \
+                'finished_date']
+
+        if criteria in criterias:
+            return Tasks(self.path, \
+                            sorted(self.tasks, key=attrgetter(criteria), \
+                                reverse=reversed))
+        else:
+            return self

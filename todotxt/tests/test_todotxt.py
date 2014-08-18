@@ -66,4 +66,14 @@ def test_tasks_filterby():
     assert tasks.tasks[0].matches('task') == True
 
     new_tasks = tasks.filter_by('task')
-    assert len(new_tasks) == 7
+    assert len(new_tasks.tasks) == 7
+    assert new_tasks.path == tasks.path
+
+
+def test_tasks_orderby():
+    tasks = Tasks('./todo.txt')
+    tasks.load()
+
+    new_tasks = tasks.order_by('priority')
+    assert new_tasks.tasks[0].priority == 'A'
+    assert new_tasks.tasks[1].priority == 'B'
