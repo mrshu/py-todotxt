@@ -39,3 +39,9 @@ def test_parse():
     assert task2.finished == True
     assert task2.todo == 'This is a finished task'
 
+    task3 = Task("Some @task with @interesting contexts", 1)
+    print(len(task3.contexts))
+    assert len(task3.contexts) == 2
+    assert task3.contexts[0] == '@task'
+    assert task3.contexts[1] == '@interesting'
+

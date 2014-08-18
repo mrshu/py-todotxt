@@ -4,6 +4,10 @@
 from datetime import datetime
 import re
 
+DATE_REGEX = "([\\d]{4})-([\\d]{2})-([\\d]{2})"
+CONTEXT_REGEX = '(@\\w+)'
+PROJECT_REGEX = '(\\+\\w+)'
+
 class Task(object):
     """A class that represents a task."""
     tid = None
@@ -16,7 +20,6 @@ class Task(object):
     created_date = None
     finished_date = None
 
-    DATE_REGEX = "([\\d]{4})-([\\d]{2})-([\\d]{2})"
 
     def __init__(self, raw_todo, id=-1):
 
@@ -34,7 +37,7 @@ class Task(object):
             self.finished = True
             splits = splits[1:]
 
-        match = re.search(self.DATE_REGEX, splits[0])
+        match = re.search(DATE_REGEX, splits[0])
         if match != None:
             self.finished_date = datetime.strptime(match.group(0), "%Y-%m-%d")
             splits = splits[1:]
@@ -49,12 +52,21 @@ class Task(object):
             self.priority = head[1]
             splits = splits[1:]
 
-        match = re.search(self.DATE_REGEX, splits[0])
+        match = re.search(DATE_REGEX, splits[0])
         if match != None:
             self.created_date = datetime.strptime(match.group(0), "%Y-%m-%d")
             splits = splits[1:]
 
         self.todo = ' '.join(splits)
+
+        match = re.findall(CONTEXT_REGEX, self.todo)
+        if len(match) != 0:
+            self.contexts = match
+
+        match = re.findall(PROJECT_REGEX, self.todo)
+        if len(match) != 0:
+            self.projects = match
+
 
     def __str__(self):
         return "{0}: {1}".format(self.tid, self.raw_todo)
