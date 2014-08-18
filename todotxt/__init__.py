@@ -68,6 +68,23 @@ class Task(object):
             self.projects = match
 
 
+    def rebuild_raw_todo(self):
+        """Rebuilds self.raw_todo from data associated with the Task object."""
+
+        finished = 'x ' if self.finished else ''
+        created_date = datetime.strftime("%Y-%m-%d ", self.created_date) if \
+            self.created_date != None else ''
+
+        finished_date = datetime.strftime("%Y-%m-%d ", self.finished_date) if \
+            self.finished_date != None else ''
+
+        priority = '(' + self.priority + ') ' if self.priority else ''
+
+        self.raw_todo = "{0}{1}{2}{3}{4}".format(finished, finished_date, \
+                priority, created_date, self.todo)
+
+        return self.raw_todo
+
     def __str__(self):
         return "{0}: {1}".format(self.tid, self.raw_todo)
 
@@ -96,6 +113,3 @@ class Tasks(object):
         """Saves tasks that are saved in this manager."""
 
         pass
-
-
-

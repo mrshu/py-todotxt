@@ -50,3 +50,13 @@ def test_parse():
     assert task3.contexts[0] == '@task'
     assert task3.contexts[1] == '@interesting'
 
+def test_todo_rebuilding():
+
+    text = "(A) +funny task with prioity and project"
+    task1 = Task(text, 1)
+    assert task1.rebuild_raw_todo() == text
+
+    updated_text = "(B) +funny task with prioity and project"
+    task1.priority = 'B'
+    assert task1.rebuild_raw_todo() == updated_text
+
