@@ -93,6 +93,9 @@ class Task(object):
     def __str__(self):
         return "{0}: {1}".format(self.tid, self.raw_todo)
 
+    def __repr__(self):
+        return "<Task {0} '{1}'>".format(self.tid, self.raw_todo)
+
 
 class Tasks(object):
     """Task manager that handles loading, saving and filtering tasks."""
