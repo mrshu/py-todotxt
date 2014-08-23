@@ -6,11 +6,10 @@ A Python library for dealing with todo.txt files
 Usage
 -----
 
-```
-from todotxt import Tasks
-tasks = Tasks('./todo.txt')
-print(tasks.filter_by('@today').order_by('priority'))
-```
+    from todotxt import Tasks
+    tasks = Tasks('./todo.txt')
+    print(tasks.filter_by('@today').order_by('priority'))
+
 
 Tests
 -----
