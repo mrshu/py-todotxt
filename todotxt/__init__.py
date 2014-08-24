@@ -69,12 +69,23 @@ class Task(object):
             self.projects = match
 
     def matches(self, text):
-        """Determines whether the tasks matches the text."""
+        """Determines whether the tasks matches the text.
+
+        Args:
+            text: the text to be matched
+
+        Returns:
+            Either True or False.
+        """
 
         return text in self.todo
 
     def rebuild_raw_todo(self):
-        """Rebuilds self.raw_todo from data associated with the Task object."""
+        """Rebuilds self.raw_todo from data associated with the Task object.
+
+        Returns:
+            The rebuilt self.raw_todo.
+        """
 
         finished = 'x ' if self.finished else ''
         created_date = datetime.strftime("%Y-%m-%d ", self.created_date) if \
@@ -121,7 +132,11 @@ class Tasks(object):
     def save(self, filename=None):
         """Saves tasks that are saved in this manager. If specified they will
         be saved in the filename arguemnt of this function. Otherwise the
-        default path (self.path) will be used."""
+        default path (self.path) will be used.
+
+        Args:
+            filename -- An optional name of the file to save the tasklist into.
+        """
 
         filename = self.path if filename == None else filename
         with open(filename, 'w') as f:
@@ -130,7 +145,15 @@ class Tasks(object):
 
     def filter_by(self, text):
         """Filteres the tasks by a given filter text. Returns a new Tasks
-        object. Note: the path parameter of the new object will stay the same."""
+        object. Note: the path parameter of the new object will stay the same.
+
+        Args:
+            text -- the text to filter the tasklist by
+
+        Returns:
+            A new :class:`Tasks` object that contains tasks that match the
+            text.
+        """
 
         return Tasks(self.path, filter(lambda x: x.matches(text), self.tasks))
 
