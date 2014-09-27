@@ -9,6 +9,7 @@ DATE_REGEX = "([\\d]{4})-([\\d]{2})-([\\d]{2})"
 CONTEXT_REGEX = '(@\\w+)'
 PROJECT_REGEX = '(\\+\\w+)'
 
+
 class Task(object):
     """A class that represents a task."""
     tid = None
@@ -20,7 +21,6 @@ class Task(object):
     finished = False
     created_date = None
     finished_date = None
-
 
     def __init__(self, raw_todo, id=-1):
 
@@ -39,22 +39,22 @@ class Task(object):
             splits = splits[1:]
 
         match = re.search(DATE_REGEX, splits[0])
-        if match != None:
+        if match is not None:
             self.finished_date = datetime.strptime(match.group(0), "%Y-%m-%d")
             splits = splits[1:]
 
         head = splits[0]
 
         if (len(head) == 3) and \
-            (head[0] == '(') and \
-            (head[2] == ')') and \
-            (ord(head[1]) >= 65 and ord(head[1]) <= 90):
+                (head[0] == '(') and \
+                (head[2] == ')') and \
+                (ord(head[1]) >= 65 and ord(head[1]) <= 90):
 
             self.priority = head[1]
             splits = splits[1:]
 
         match = re.search(DATE_REGEX, splits[0])
-        if match != None:
+        if match is not None:
             self.created_date = datetime.strptime(match.group(0), "%Y-%m-%d")
             splits = splits[1:]
 
@@ -89,15 +89,17 @@ class Task(object):
 
         finished = 'x ' if self.finished else ''
         created_date = datetime.strftime("%Y-%m-%d ", self.created_date) if \
-            self.created_date != None else ''
+            self.created_date is not None else ''
 
         finished_date = datetime.strftime("%Y-%m-%d ", self.finished_date) if \
-            self.finished_date != None else ''
+            self.finished_date is not None else ''
 
         priority = '(' + self.priority + ') ' if self.priority else ''
 
-        self.raw_todo = "{0}{1}{2}{3}{4}".format(finished, finished_date, \
-                priority, created_date, self.todo)
+        self.raw_todo = "{0}{1}{2}{3}{4}".format(finished, finished_date,
+                                                 priority,
+                                                 created_date,
+                                                 self.todo)
 
         return self.raw_todo
 
@@ -117,7 +119,7 @@ class Tasks(object):
 
     def __init__(self, path=None, tasks=None):
         self.path = path
-        self.tasks = tasks if tasks != None else []
+        self.tasks = tasks if tasks is not None else []
 
     def load(self):
         """Loads tasks from given file, parses them into internal
@@ -138,7 +140,7 @@ class Tasks(object):
             filename -- An optional name of the file to save the tasklist into.
         """
 
-        filename = self.path if filename == None else filename
+        filename = self.path if filename is None else filename
         with open(filename, 'w') as f:
             for task in self.tasks:
                 f.write("{0}\n".format(task.rebuild_raw_todo()))
@@ -171,12 +173,12 @@ class Tasks(object):
         if criteria[0] == '-':
             reversed = True
 
-        criterias = ['id', 'priority', 'finished', 'created_date', \
-                'finished_date']
+        criterias = ['id', 'priority', 'finished', 'created_date',
+                     'finished_date']
 
         if criteria in criterias:
-            return Tasks(self.path, \
-                            sorted(self.tasks, key=attrgetter(criteria), \
+            return Tasks(self.path,
+                         sorted(self.tasks, key=attrgetter(criteria),
                                 reverse=reversed))
         else:
             return self
