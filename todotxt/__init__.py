@@ -11,6 +11,7 @@ PROJECT_REGEX = '(\\+\\w+)'
 
 
 class Task(object):
+
     """A class that represents a task."""
     tid = None
     raw_todo = ''
@@ -111,6 +112,7 @@ class Task(object):
 
 
 class Tasks(object):
+
     """Task manager that handles loading, saving and filtering tasks."""
 
     # the location of the todo.txt file
