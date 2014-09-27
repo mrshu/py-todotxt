@@ -180,3 +180,15 @@ class Tasks(object):
                                 reverse=reversed))
         else:
             return self
+
+    def add(self, text):
+        """Adds a new task given the text.
+
+        Args:
+            text -- the text of the task
+
+        Returns:
+            A new :class:`Tasks` object that contains the newly created task"""
+
+        self.tasks.append(Task(text, len(self.tasks)))
+        return self
