@@ -88,3 +88,36 @@ def test_tasks_filterby_and_orderby():
     new_tasks = tasks.order_by('priority').filter_by('context')
     assert len(new_tasks.tasks) == 2
     assert new_tasks.tasks[0].priority == 'B'
+
+
+def load_caller(tasks):
+    tasks.called_load = 1
+
+
+def loaded_caller(tasks):
+    tasks.called_loaded = 1
+
+
+def save_caller(tasks):
+    tasks.called_save = 1
+
+
+def saved_caller(tasks):
+    tasks.called_saved = 1
+
+
+def test_events_and_save():
+    tasks = Tasks('./todo.txt')
+    tasks.add_handler('load', load_caller)
+    tasks.add_handler('loaded', loaded_caller)
+    tasks.add_handler('save', save_caller)
+    tasks.add_handler('saved', saved_caller)
+    tasks.load()
+
+    assert tasks.called_load == 1
+    assert tasks.called_loaded == 1
+
+    tasks.save()
+
+    assert tasks.called_save == 1
+    assert tasks.called_saved == 1

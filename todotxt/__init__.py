@@ -89,13 +89,13 @@ class Task(object):
         """
 
         finished = 'x ' if self.finished else ''
-        created_date = datetime.strftime("%Y-%m-%d ", self.created_date) if \
+        created_date = self.created_date.strftime("%Y-%m-%d ") if \
             self.created_date is not None else ''
 
-        finished_date = datetime.strftime("%Y-%m-%d ", self.finished_date) if \
+        finished_date = self.finished_date.strftime("%Y-%m-%d ") if \
             self.finished_date is not None else ''
 
-        priority = '(' + self.priority + ') ' if self.priority else ''
+        priority = '(' + self.priority + ') ' if self.priority != '^' else ''
 
         self.raw_todo = "{0}{1}{2}{3}{4}".format(finished, finished_date,
                                                  priority,
@@ -135,7 +135,7 @@ class Tasks(object):
         with open(self.path, 'r') as f:
             i = 0
             for line in f:
-                self.tasks.append(Task(line, i))
+                self.tasks.append(Task(line.strip(), i))
                 i += 1
 
         self._trigger_event('loaded')
@@ -228,4 +228,4 @@ class Tasks(object):
         if event in self.handlers:
             self.handlers[event].append(handler)
         else:
-            self.handler[event] = [handler]
+            self.handlers[event] = [handler]
