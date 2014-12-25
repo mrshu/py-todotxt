@@ -232,3 +232,9 @@ class Tasks(object):
             self.handlers[event].append(handler)
         else:
             self.handlers[event] = [handler]
+
+    def __str__(self):
+        return str(self.tasks)
+
+    def __repr__(self):
+        return "<Tasks {0}>".format(self.__str__())

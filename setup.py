@@ -3,12 +3,12 @@ from os import path
 
 here = path.abspath(path.dirname(__file__))
 
-with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
+with open(path.join(here, 'README.rst')) as f:
     long_description = f.read()
 
 setup(
     name='todotxt',
-    version='0.0.1',
+    version='0.0.2',
 
     description='A Python library for dealing with todo.txt files',
     long_description=long_description,
@@ -36,4 +36,3 @@ setup(
     keywords='todotxt',
     packages=['todotxt']
 )
-
