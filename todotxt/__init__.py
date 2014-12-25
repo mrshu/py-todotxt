@@ -9,13 +9,15 @@ DATE_REGEX = "([\\d]{4})-([\\d]{2})-([\\d]{2})"
 CONTEXT_REGEX = '(@\\w+)'
 PROJECT_REGEX = '(\\+\\w+)'
 
+NO_PRIORITY_CHARACTER = '^'
+
 
 class Task(object):
 
     """A class that represents a task."""
     tid = None
     raw_todo = ''
-    priority = '^'
+    priority = NO_PRIORITY_CHARACTER
     todo = ''
     projects = []
     contexts = []
@@ -95,7 +97,8 @@ class Task(object):
         finished_date = self.finished_date.strftime("%Y-%m-%d ") if \
             self.finished_date is not None else ''
 
-        priority = '(' + self.priority + ') ' if self.priority != '^' else ''
+        priority = '(' + self.priority + ') ' if \
+            self.priority != NO_PRIORITY_CHARACTER else ''
 
         self.raw_todo = "{0}{1}{2}{3}{4}".format(finished, finished_date,
                                                  priority,
