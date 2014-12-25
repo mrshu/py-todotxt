@@ -119,6 +119,9 @@ class Tasks(object):
     path = ''
     tasks = []
 
+    # the dict that holds event handlers
+    handlers = {}
+
     def __init__(self, path=None, tasks=None):
         self.path = path
         self.tasks = tasks if tasks is not None else []
@@ -127,11 +130,15 @@ class Tasks(object):
         """Loads tasks from given file, parses them into internal
         representation and stores them in this manager's object."""
 
+        self._trigger_event('load')
+
         with open(self.path, 'r') as f:
             i = 0
             for line in f:
                 self.tasks.append(Task(line, i))
                 i += 1
+
+        self._trigger_event('loaded')
 
     def save(self, filename=None):
         """Saves tasks that are saved in this manager. If specified they will
@@ -142,10 +149,14 @@ class Tasks(object):
             filename -- An optional name of the file to save the tasklist into.
         """
 
+        self._trigger_event('save')
+
         filename = self.path if filename is None else filename
         with open(filename, 'w') as f:
             for task in self.tasks:
                 f.write("{0}\n".format(task.rebuild_raw_todo()))
+
+        self._trigger_event('saved')
 
     def filter_by(self, text):
         """Filteres the tasks by a given filter text. Returns a new Tasks
@@ -196,3 +207,25 @@ class Tasks(object):
 
         self.tasks.append(Task(text, len(self.tasks)))
         return self
+
+    def _trigger_event(self, event):
+        """Triggers an event by calling handler functions assigned for it.
+
+        Args:
+            event -- the event to trigger"""
+
+        if event in self.handlers:
+            for handler in self.handlers[event]:
+                handler(self)
+
+    def add_handler(self, event, handler):
+        """Attach a handler function to an event.
+
+        Args:
+            event -- name of the event to attach the handler to
+            handler -- the function that shall handle the event"""
+
+        if event in self.handlers:
+            self.handlers[event].append(handler)
+        else:
+            self.handler[event] = [handler]
